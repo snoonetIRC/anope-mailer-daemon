@@ -21,6 +21,7 @@ def main():
     msg = email.message_from_string(text)  # type: Message
 
     file = (mail_dir / '{}.mail'.format(uuid.uuid4()))
+    file.touch(0o600)
     with file.open('wb') as f:
         f.write(msg.as_bytes())
 
