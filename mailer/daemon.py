@@ -5,8 +5,8 @@ from typing import Union
 
 import requests
 
-from mailer.message import UserEmail
 from .config import SMTPConfig, Config
+from .message import UserEmail
 
 
 class Daemon:
