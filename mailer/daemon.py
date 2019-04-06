@@ -1,5 +1,6 @@
 import os
 import random
+import time
 import traceback
 from typing import Union
 
@@ -51,6 +52,11 @@ class Daemon:
         try:
             return data['nc']['REGSERVER']
         except KeyError:
+            # If the nick was registered more than an hour ago,
+            # assume it should use the default network
+            if data['time_registered'] < (time.time() - 3600):
+                return 'default'
+
             return None
 
     @property
