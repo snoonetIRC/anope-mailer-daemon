@@ -91,4 +91,7 @@ class ErrorReporter(Reporter):
         if self.errors:
             body += self.make_section("Errors", self.errors)
 
+        self.warnings.clear()
+        self.errors.clear()
+
         self.send_message(subject, body)
