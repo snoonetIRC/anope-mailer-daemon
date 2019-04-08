@@ -1,13 +1,25 @@
+import re
 from email import message_from_file
 from email.message import Message
 from pathlib import Path
+
+TO_RE = re.compile(r'^"(?P<nick>\S+)" <(?P<email>.*)>$')
 
 
 class UserEmail:
     def __init__(self, headers, data):
         self.headers = headers
         self.data = data
-        self.user = data['nick']
+        try:
+            self.user = data['nick']
+        except KeyError as e:
+            to_header = headers['To']
+            match = TO_RE.match(to_header)
+            if not match:
+                raise ValueError("Invalid 'To' header format {!r}".format(to_header)) from e
+
+            self.user = match.group('nick')
+
         self.message_type = data['type']
         self.user_email = headers['To']
 
