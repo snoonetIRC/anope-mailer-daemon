@@ -33,7 +33,7 @@ class Daemon:
 
     def get_network(self, nick):
         server = self.get_reg_server(nick)
-        if not server:
+        if server is None:
             return None
 
         for net in self.config.networks:
