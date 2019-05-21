@@ -95,3 +95,16 @@ networks:
     # Any server not already matched uses this config
     server: '*'
     smtp: snoonet
+    formats:
+      memo:
+        subject: New memo from {sender}
+        message: |-
+          Hi {nick},
+
+          You've just received a new memo from {sender}. This is memo number {memo_id}.
+
+          Memo text:
+
+          {text}
+
+          Automated message from {network}. Please do not reply to this email.
