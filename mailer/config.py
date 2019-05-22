@@ -2,11 +2,15 @@ from collections import ChainMap
 from email.message import Message
 from pathlib import Path
 from smtplib import SMTP
+from typing import Dict
 
 import yaml
 
-from .reporter import ErrorReporter
+from mailer.email_template import EmailTemplate
 from .network import Network
+from .reporter import ErrorReporter
+
+__all__ = ('SMTPConfig', 'Config')
 
 
 class SMTPConfig:
@@ -48,13 +52,22 @@ class SMTPConfig:
 
 
 class Config:
+    @staticmethod
+    def compile_templates(config) -> Dict[str, EmailTemplate]:
+        return {
+            name: EmailTemplate.from_config(data)
+            for name, data in config.items()
+        }
+
     def __init__(self, filename, core):
         self.core = core
         with Path(filename).resolve().open() as f:
             data = yaml.safe_load(f)
 
         self.config = data
-        self.default_formats = data.get('default_formats', {})
+        self.default_formats = self.compile_templates(
+            data.get('default_formats', {})
+        )
         self.api_url = data['api']
         self.mail_dir = Path(data.get('mail_dir', 'emails')).resolve()
         self.smtp_configs = {
@@ -63,7 +76,8 @@ class Config:
         }
 
         self.networks = [
-            Network.from_config(self.core, net, self) for net in data.get('networks', [])
+            Network.from_config(self.core, net, self)
+            for net in data.get('networks', [])
         ]
 
         self.reports_config = data.get('reports')
