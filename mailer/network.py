@@ -4,7 +4,7 @@ from email.message import EmailMessage
 from fnmatch import fnmatch
 from typing import Dict, TYPE_CHECKING
 
-from mailer.email_template import EmailTemplate
+from .email_template import EmailTemplate
 
 if TYPE_CHECKING:
     from . import daemon, message

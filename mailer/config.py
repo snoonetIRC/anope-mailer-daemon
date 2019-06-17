@@ -6,7 +6,7 @@ from typing import Dict
 
 import yaml
 
-from mailer.email_template import EmailTemplate
+from .email_template import EmailTemplate
 from .network import Network
 from .reporter import ErrorReporter
 
