@@ -7,12 +7,11 @@ from typing import Dict, TYPE_CHECKING
 from mailer.email_template import EmailTemplate
 
 if TYPE_CHECKING:
-    from .daemon import Daemon
-    from .message import UserEmail
+    from . import daemon, message
 
 
 class Network:
-    def __init__(self, name, server_pattern, config, core: 'Daemon'):
+    def __init__(self, name, server_pattern, config, core: 'daemon.Daemon'):
         self.core = core
         self.name = name
         self.server_pattern = server_pattern
@@ -21,7 +20,7 @@ class Network:
         self.formats: Dict[str, EmailTemplate] = {}
 
     @classmethod
-    def from_config(cls, core: 'Daemon', net_config, config):
+    def from_config(cls, core: 'daemon.Daemon', net_config, config):
         net_obj = cls(net_config['name'], net_config['server'], net_config, core)
         net_obj.formats.update(config.default_formats)
         net_obj.formats.update(config.compile_templates(
@@ -32,12 +31,12 @@ class Network:
     def match_server(self, server):
         return fnmatch(server, self.server_pattern)
 
-    def format_message(self, message: 'UserEmail'):
+    def format_message(self, message: 'message.UserEmail'):
         fmt = self.formats[message.message_type]
         data = ChainMap({'network': self.name}, message.data)
         return fmt.generate(data)
 
-    def send_email(self, message: 'UserEmail'):
+    def send_email(self, message: 'message.UserEmail'):
         email: EmailMessage = message_from_string(
             self.format_message(message),
             policy=policy.SMTP,
