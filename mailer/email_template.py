@@ -14,7 +14,7 @@ Subject: {subject}
 class EmailTemplate:
     def __init__(self, file: Path = None, config: Dict[str, Any] = None):
         if config and file:
-            raise TypeError("Only one of 'body' or 'file' can be used")
+            raise TypeError("Only one of 'config' or 'file' can be used")
 
         if file:
             with file.open(encoding='utf8') as f:
