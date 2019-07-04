@@ -7,7 +7,7 @@ __all__ = ('EmailTemplate',)
 SIMPLE_FMT = """\
 Subject: {subject}
 
-{body}
+{message}
 """
 
 
