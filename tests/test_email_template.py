@@ -6,7 +6,7 @@ import pytest
 def test_config_template():
     config = {
         'subject': "Test Subject",
-        'body': "Test Body",
+        'message': "Test Body",
     }
 
     from mailer.email_template import EmailTemplate
