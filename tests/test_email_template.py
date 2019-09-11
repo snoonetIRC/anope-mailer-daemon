@@ -17,7 +17,7 @@ def test_config_template():
 
 @pytest.fixture()
 def temp_file():
-    with NamedTemporaryFile() as f:
+    with NamedTemporaryFile(delete=False) as f:
         yield f
 
 

@@ -1,0 +1,104 @@
+mail_dir: emails
+smtp:
+  network1:
+    server: smtp.example.com
+    from_addr: noreply@network.net
+    port: 587
+    tls: true
+    user_name: ''
+    password: ''
+  reports:
+    from_addr: maild_reports@snoonet.org
+    server: smtp-relay.gmail.com
+    port: 587
+    tls: true
+    smtp_helo: snoonet.org
+
+reports:
+  default:
+    to: admin@example.com
+    smtp: reports
+    delay: 1h  # By default send reports once an hour
+  stats:
+    # Statistics reports
+    delay: 1d  # Only send statistics once per day
+  errors:
+    # Error reports
+    delay: 10m  # Send an error summary at most once every 10 minutes
+
+# requires:
+#   https://github.com/snoonetIRC/anope-modules/blob/master/modules/m_data_api.cpp
+#   https://github.com/snoonetIRC/anope-modules/blob/master/modules/m_store_server.cpp
+api: https://localhost:8888
+
+default_formats:
+  registration:
+    subject: Nickname registration for {nick}
+    message: |-
+      Hi,
+
+      You have requested to register the nickname {nick} on {network}.
+      Please type \" /msg NickServ CONFIRM {code} \" in your IRC Client to complete registration.
+
+      If you don't know why this mail was sent to you, please ignore it silently.
+
+      {network} administrators.
+  reset:
+    subject: Reset password request for {nick}
+    message: |-
+      Hi,
+
+      You have requested to have the password for {nick} reset.
+      To reset your password, type \" /msg NickServ CONFIRM {nick} {code} \"
+      After you do this, you will be logged in to your account by anope.
+      Then change your password with \" /msg NickServ SET PASSWORD newpasshere \".
+
+      If you don't know why this mail was sent to you, please ignore it silently.
+
+      {network} administrators.
+  emailchange:
+    subject: Email confirmation
+    message: |-
+      Hi,
+
+      You have requested to change your email address to {newmail}.
+      Please type \" /msg NickServ CONFIRM {code} \" in your IRC client to confirm this change.
+
+      If you don't know why this mail was sent to you, please ignore it silently.
+
+      {network} administrators.
+  memo:
+    subject: New memo
+    message: |-
+      Hi {nick},
+
+      You've just received a new memo from {sender}. This is memo number {memo_id}.
+
+      Memo text:
+
+      {text}
+
+      Automated message from {network}. Please do not reply to this email.
+
+networks:
+  - name: Net1
+    server: '*.example.com'
+    smtp: network1
+
+  - name: Snoonet
+    # Any server not already matched uses this config
+    server: '*'
+    smtp: snoonet
+    formats:
+      memo:
+        subject: New memo from {sender}
+        message: |-
+          Hi {nick},
+
+          You've just received a new memo from {sender}. This is memo number {memo_id}.
+
+          Memo text:
+
+          {text}
+
+          Automated message from {network}. Please do not reply to this email.

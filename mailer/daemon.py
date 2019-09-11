@@ -1,5 +1,6 @@
 import os
 import random
+import smtplib
 import time
 import traceback
 from typing import Union
@@ -18,7 +19,12 @@ class Daemon:
         if isinstance(smtp_config, str):
             smtp_config = self.config.smtp_configs[smtp_config]
 
-        smtp_config.send(message)
+        try:
+            smtp_config.send(message)
+        except smtplib.SMTPRecipientsRefused as e:
+            self.error_reporter.report_warning(
+                "Invalid email recipient(s) {!r}, ignoring message".format(e.recipients)
+            )
 
     def on_error(self):
         """Must only be called while handling an exception"""
