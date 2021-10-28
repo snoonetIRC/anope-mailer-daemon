@@ -68,7 +68,6 @@ class Config:
         self.default_formats = self.compile_templates(
             data.get('default_formats', {})
         )
-        self.api_url = data['api']
         self.mail_dir = Path(data.get('mail_dir', 'emails')).resolve()
         self.smtp_configs = {
             name: SMTPConfig.from_config(name, data)

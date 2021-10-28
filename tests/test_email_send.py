@@ -6,7 +6,6 @@ from textwrap import dedent
 
 import pytest
 from mock import patch
-from responses import RequestsMock
 
 from mailer.config import SMTPConfig
 
@@ -23,21 +22,6 @@ def mock_smtp_config():
 
 
 @pytest.fixture()
-def mock_api():
-    with RequestsMock() as reqs:
-        reqs.add(
-            'GET', 'https://localhost:8888/api/user?name=nick',
-            match_querystring=True,
-            json={
-                'nc': {
-                    'REGSERVER': 'test.example.com',
-                }
-            }
-        )
-        yield reqs
-
-
-@pytest.fixture()
 def override_config():
     old = os.getenv('MAILER_CONFIG')
     try:
@@ -50,7 +34,7 @@ def override_config():
             os.environ['MAILER_CONFIG'] = old
 
 
-def test_invalid_recipient(override_config, mock_smtp_config, mock_api):
+def test_invalid_recipient(override_config, mock_smtp_config):
     from mailer.daemon import Daemon
     daemon = Daemon()
     with patch.object(daemon.config, 'error_reporter') as reporter:
