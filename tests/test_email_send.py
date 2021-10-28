@@ -25,7 +25,7 @@ def mock_smtp_config():
 def override_config():
     old = os.getenv('MAILER_CONFIG')
     try:
-        os.environ['MAILER_CONFIG'] = 'travis/config.tests.yaml'
+        os.environ['MAILER_CONFIG'] = 'ci/config.tests.yaml'
         yield
     finally:
         if old is None:

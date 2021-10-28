@@ -1,23 +1,10 @@
 version: 2
 updates:
 - package-ecosystem: pip
-  directory: "/"
+  directory: /
   schedule:
     interval: daily
-    time: "07:00"
-  open-pull-requests-limit: 10
-  reviewers:
-  - linuxdaemon
-  ignore:
-  - dependency-name: responses
-    versions:
-    - 0.12.1
-    - 0.13.0
-    - 0.13.1
-    - 0.13.2
-  - dependency-name: urllib3
-    versions:
-    - 1.26.3
-  - dependency-name: pytest
-    versions:
-    - 6.2.2
+- package-ecosystem: github-actions
+  directory: /
+  schedule:
+    interval: daily
