@@ -1,6 +1,6 @@
 mail_dir: emails
 smtp:
-  network1:
+  snoonet:
     server: smtp.example.com
     from_addr: noreply@network.net
     port: 587
@@ -25,11 +25,6 @@ reports:
   errors:
     # Error reports
     delay: 10m  # Send an error summary at most once every 10 minutes
-
-# requires:
-#   https://github.com/snoonetIRC/anope-modules/blob/master/modules/m_data_api.cpp
-#   https://github.com/snoonetIRC/anope-modules/blob/master/modules/m_store_server.cpp
-api: https://localhost:8888
 
 default_formats:
   registration:
@@ -81,10 +76,6 @@ default_formats:
       Automated message from {network}. Please do not reply to this email.
 
 networks:
-  - name: Net1
-    server: '*.example.com'
-    smtp: network1
-
   - name: Snoonet
     # Any server not already matched uses this config
     server: '*'

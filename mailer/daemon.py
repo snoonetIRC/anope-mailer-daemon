@@ -49,21 +49,7 @@ class Daemon:
         return None
 
     def get_reg_server(self, nick):
-        with requests.get(
-                self.config.api_url + '/api/user',
-                params={'name': nick}
-        ) as response:
-            data = response.json()
-
-        try:
-            return data['nc']['REGSERVER']
-        except KeyError:
-            # If the nick was registered more than an hour ago,
-            # assume it should use the default network
-            if data['time_registered'] < (time.time() - 3600):
-                return 'default'
-
-            return None
+        return 'default'
 
     @property
     def mail_dir(self):
