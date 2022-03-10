@@ -3,7 +3,8 @@ import random
 import smtplib
 import time
 import traceback
-from typing import Union
+from pathlib import Path
+from typing import Iterable, List, Union
 
 import requests
 
@@ -32,8 +33,8 @@ class Daemon:
         if self.error_reporter:
             self.error_reporter.report_error(traceback.format_exc())
 
-    def get_email_files(self):
-        files = list(self.mail_dir.rglob('*.mail'))
+    def get_email_files(self)->List[Path]:
+        files = list(self._filter_files(self.mail_dir.rglob('*.mail')))
         random.shuffle(files)
         return files
 
@@ -74,3 +75,15 @@ class Daemon:
         net.send_email(email)
         file.unlink()
         return True
+
+    @staticmethod
+    def _filter_files(files:Iterable[Path]):
+        for file in files:
+            # Wait 30 seconds before reading the file
+            if time.time() - file.stat().st_ctime < 30:
+                continue
+
+            if file.stat().st_size == 0:
+                continue
+
+            yield file
