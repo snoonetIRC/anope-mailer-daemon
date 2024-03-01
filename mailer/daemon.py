@@ -6,8 +6,6 @@ import traceback
 from pathlib import Path
 from typing import Iterable, List, Union
 
-import requests
-
 from .config import SMTPConfig, Config
 from .message import UserEmail
 
