@@ -1,4 +1,5 @@
 from datetime import datetime
+from email import message_from_string
 from email.message import EmailMessage
 from typing import TYPE_CHECKING
 
@@ -30,7 +31,7 @@ class Reporter:
         message = EmailMessage()
         message['To'] = self.email
         message['Subject'] = subject
-        message.set_payload(body)
+        message.set_payload(body, charset='utf-8')
 
         self.core.send_message(self.smtp_config, message)
 

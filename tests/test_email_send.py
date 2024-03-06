@@ -1,3 +1,4 @@
+from email.message import EmailMessage
 import os
 import smtplib
 from pathlib import Path
@@ -53,3 +54,32 @@ def test_invalid_recipient(override_config, mock_smtp_config):
         reporter.report_warning.assert_called_with(
             "Invalid email recipient(s) ['nick <a.user@!somedomain.org>'], ignoring message"
         )
+
+
+def test_emoji_message(override_config):
+    from mailer.daemon import Daemon
+    daemon = Daemon()
+    with patch.object(daemon, 'send_message') as sender:
+        with NamedTemporaryFile(delete=False) as tmp:
+            tmp.write(dedent("""\
+            From: test@example.com
+            To: "nick" <a.user@somedomain.org>
+
+            nick=nick
+            type=memo
+            sender=foo
+            memo_id=1
+            text=😇
+            """).encode())
+
+        daemon.handle_email(Path(tmp.name))
+        messages: list[EmailMessage] = [
+            c.args[1]
+            for c in sender.mock_calls
+        ]
+
+        assert len(messages) == 1
+        msg = messages[0]
+        # assert dict(msg) == {}
+
+        assert msg.as_bytes()

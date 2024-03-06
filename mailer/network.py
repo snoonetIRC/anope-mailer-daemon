@@ -39,9 +39,10 @@ class Network:
     def send_email(self, message: 'message.UserEmail'):
         email: EmailMessage = message_from_string(
             self.format_message(message),
-            policy=policy.SMTP,
+            policy=policy.SMTPUTF8,
         )
         del email['To']
         email['To'] = message.user_email
+        email.set_charset('utf-8')
 
         self.core.send_message(self.smtp_config, email)
